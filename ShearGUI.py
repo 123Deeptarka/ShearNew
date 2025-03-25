@@ -30,7 +30,7 @@ st.sidebar.header("Specify Input Parameters")
 
 #import data
 
-df = pd.read_excel('shearmldata.xlsx')
+df = pd.read_excel('B.xlsx')
 x = df[["D","L/D","fc","fyl","fyt","pl","pt","Ny"]]
 y = df[["DS1","DS2","DS3","DS4","F1","F2","F3","F4"]]
 from sklearn.model_selection import train_test_split
