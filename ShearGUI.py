@@ -18,9 +18,7 @@ import streamlit as st
 import numpy as np 
 from xgboost import XGBRegressor
 import matplotlib.pyplot as plt
-#rom tensorflow.keras.models import Sequential
-#rom tensorflow.keras.layers import Conv1D,Activation,MaxPooling1D,Dense,Flatten
-#mport keras 
+
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error,r2_score
 
@@ -40,9 +38,9 @@ x_train,x_test,y_train,y_test = train_test_split(x,y,test_size = 0.2,random_stat
 
 
 
-model=XGBRegressor(n_estimators=50,random_state=0,max_depth=5,max_leaves=20,reg_lambda=1,reg_alpha=2)
+#model=XGBRegressor(n_estimators=50,random_state=0,max_depth=5,max_leaves=20,reg_lambda=1,reg_alpha=2)
 #model=XGBRegressor()
-#model=RandomForestRegressor()
+model=RandomForestRegressor()
 model.fit(x_train,y_train)
 pred=model.predict(x_test)
 print("The R2 value for Test Set is :",r2_score(pred,y_test))
@@ -77,29 +75,25 @@ new_column_names = {
     "Ny": "Ny"
 }
 
-# Rename the columns
+
 Data.rename(columns=new_column_names, inplace=True)
 
-#style = [
-#   dict(selector="th", props=[("font-size", "20px"), ("font-weight", "bold"), ("color", "#484848")]),
-#    dict(selector="td", props=[("font-size", "16px"),("font-weight", "bold") ,("color", "#484848")])
-#]
+
 style = [
     dict(selector="th", props=[("font-size", "20px"), ("font-weight", "bold"), ("color", "#484848"), ("border", "4px solid #484848")]),
     dict(selector="td", props=[("font-size", "16px"), ("font-weight", "bold"), ("color", "#484848"), ("border", "4px solid #484848")]),
     dict(selector="table", props=[("border-collapse", "collapse")])  # Ensures borders are collapsed
 ]
 Data_New=pd.DataFrame(Data,columns=["D(mm)","L/D","fc(Mpa)","fyl(Mpa)","fyt(Mpa)","pl","pt","Ny"])
-# Apply styling to dataframe
+
 st_df = Data.style.set_table_styles(style).format("{:.3f}").hide(axis="index")
-# Convert to HTML without index and display
-# Reset the index and drop it to remove the index column
+
 Data_no_index = Data.reset_index(drop=True)
 
-# Convert the DataFrame to HTML without the index
+
 html = Data_no_index.to_html(index=False)
 
-# Apply custom CSS to the HTML table
+
 html = f"""
 <style>
     table {{
@@ -129,17 +123,6 @@ html = f"""
 # Display the HTML table
 st.markdown(html, unsafe_allow_html=True)
 
-
-
-
-
-# Display using st.table or st.dataframe
-#st.table(st_df)
-
-
-
-
-
 st.header("Predicted Damage States ")
 
 P=pd.DataFrame(prediction,columns=["DS1","DS2","DS3","DS4","F1 (kN)","F2 (kN)","F3 (kN)","F4 (kN)"])
@@ -149,30 +132,17 @@ P_DS=P[["DS1","DS2","DS3","DS4"]]
 
 #st.dataframe(P_DS,hide_index=True)
 P_F=P[["F1 (kN)","F2 (kN)","F3 (kN)","F4 (kN)"]]
-#P_DS_display = P_DS.reset_index(drop=True)
-#st.write(P_DS)
-#styles = [
- #   dict(selector="th", props=[("font-size", "20px"), ("font-weight", "bold"), ("color", "#484848")]),
- #   dict(selector="td", props=[("font-size", "16px"),("font-weight", "bold") ,("color", "#484848")])
-#]
-# Apply styling to dataframe
-#styled_df = P_DS.style.set_table_styles(styles)
-#st.table(styled_df)
 
-# Title
-#st.write("Drift Ratio")
+
+
 
 # Title with Markdown for styling
 st.markdown("<h1 style='text-align: center; font-size: 20px; font-weight: bold; color: #484848;'>Drift Ratio (%)</h1>", unsafe_allow_html=True)
 
 # Subtitles
-#st.write("DS1, DS2, DS3, DS4")
 
-# Styling
-#styles = [
-   # dict(selector="th", props=[("font-size", "20px"), ("font-weight", "bold"), ("color", "#484848")]),
-   # dict(selector="td", props=[("font-size", "16px"), ("font-weight", "bold")    ,("color", "#484848")])
-#]
+
+
 styles = [
     dict(selector="th", props=[("font-size", "20px"), ("font-weight", "bold"), ("color", "#484848"), ("border", "4px solid #484848")]),
     dict(selector="td", props=[("font-size", "16px"), ("font-weight", "bold"), ("color", "#484848"), ("border", "4px solid #484848")]),
@@ -182,10 +152,7 @@ styles = [
 # Apply styling to dataframe
 styled_df = P_DS.style.set_table_styles(styles).format("{:.3f}").hide(axis="index")
 
-#html = styled_df.to_html(index=False)
-#st.write(html,unsafe_allow_html=True)
-# Display the table
-#st.table(styled_df)
+
 P_DS_no_index = P_DS.round(2).reset_index(drop=True)
 html = P_DS_no_index.to_html(index=False)
 
